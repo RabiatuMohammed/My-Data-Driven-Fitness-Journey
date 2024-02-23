@@ -44,7 +44,7 @@ ADD CONSTRAINT positive_duration CHECK (WorkoutDurationMinutes >= 0);
 ALTER TABLE IronOasis
 ADD CONSTRAINT unique_workout UNIQUE(Date, ExercisesPerformed);
 
--- Remove duplicate hydration records, keeping only the first entry for each date
+-- Remove duplicate hydration records
 DELETE FROM HydrationHaven
 WHERE ctid NOT IN (
     SELECT MIN(ctid)
@@ -56,7 +56,7 @@ WHERE ctid NOT IN (
 -- Correct unrealistic water intake values by setting them to NULL or a sensible default
 UPDATE HydrationHaven
 SET WaterIntakeOunces = NULL
-WHERE WaterIntakeOunces <= 0 OR WaterIntakeOunces > 200;  -- Assuming 200 ounces is the upper reasonable limit
+WHERE WaterIntakeOunces <= 0 OR WaterIntakeOunces > 200; 
 
 -- Eliminate duplicate walking activity entries, retaining the first instance for each date
 DELETE FROM StrollStories
@@ -78,7 +78,7 @@ WHERE DistanceCoveredMiles <= 0;
 
 -- Standardize location names to ensure consistency in naming conventions
 UPDATE StrollStories
-SET Location = 'Central Park'  -- Example: Consolidating variations of 'Central Park'
+SET Location = 'Central Park'  
 WHERE Location IN ('central park', 'Central park', 'central Park');
 
 --Cleaning Protein Intake Data
@@ -90,7 +90,7 @@ WHERE ctid NOT IN (
     GROUP BY Date, ProteinSource
 );
 
--- Address missing protein data thoughtfully, possibly by setting to NULL or estimating
+
 -- Adjust unrealistic protein intake values by setting them to a more plausible number or NULL
 UPDATE ProteinPower
 SET ProteinIntakeGrams = NULL
@@ -107,4 +107,4 @@ WHERE ctid NOT IN (
 
 -- Ensure activity names are consistent to facilitate accurate analysis
 UPDATE WeekendWellness
-SET LeisureActivities = REPLACE(LeisureActivities, 'reading', 'Reading');  -- Example: Normalizing 'Reading' variations
+SET LeisureActivities = REPLACE(LeisureActivities, 'reading', 'Reading');  
